@@ -1,0 +1,3 @@
+.smooth-transition {
+  transition: height 2s ease-in-out;
+}
