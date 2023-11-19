@@ -1,17 +1,13 @@
 import "./App.css";
 import "leaflet/dist/leaflet.css";
 import Main from "./components/Main";
-import { OpenAI } from "openai";
+import { createAppState } from "./signals/index";
 
-export const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_REACT_APP_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
-
-export const thread = openai.beta.threads.create();
+const initiatedThread = createAppState();
+initiatedThread.createNewThread();
 
 function App() {
-  return <Main />;
+  return <Main initiatedThread={initiatedThread} />;
 }
 
 export default App;

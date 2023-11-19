@@ -21,7 +21,7 @@ const Chat = ({ submitData, messages }) => {
       >
         {messages.map((message, index) => (
           <p key={index} className="messages">
-            {message.inputQuery}
+            {message.content[0].text.value}
           </p>
         ))}
       </div>
