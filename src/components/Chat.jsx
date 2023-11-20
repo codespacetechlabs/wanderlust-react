@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import Form from "./Form";
 import PropTypes from "prop-types";
+import ReactMarkdown from "react-markdown";
+import { loading } from "../signals";
 
 const Chat = ({ submitData, messages }) => {
   useEffect(() => {
@@ -19,13 +21,19 @@ const Chat = ({ submitData, messages }) => {
           "flex-1 max-h-1/2 lg:max-h-full overflow-y-auto"
         }`}
       >
-        {messages.map((message, index) => (
-          <p key={index} className="messages">
+        {messages.reverse().map((message, index) => (
+          <ReactMarkdown className="messages" key={index}>
             {message.content[0].text.value}
-          </p>
+          </ReactMarkdown>
         ))}
       </div>
       <Form submitData={submitData} />
+      {loading.value && (
+        <div
+          id="loader"
+          className="bg-[rgba(2,132,199,0.5)] h-[4px] relative rounded-full"
+        ></div>
+      )}
     </div>
   );
 };

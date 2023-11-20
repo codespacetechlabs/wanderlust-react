@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
 import { BsFillSendArrowDownFill } from "react-icons/bs";
+import { loading } from "../signals";
 const Form = ({ submitData }) => {
   const formData = useFormik({
     initialValues: {
@@ -28,9 +29,10 @@ const Form = ({ submitData }) => {
           placeholder="Where do you want to go?"
           onChange={(e) => formData.handleChange(e)}
           value={formData.values.inputQuery}
-          className="border-b-2 border-black p-2 w-full outline-none"
+          className="border-b-2 border-black p-2 w-full outline-none bg-transparent"
           aria-autocomplete="none"
           autoComplete="off"
+          disabled={loading.value}
         />
         <button
           type="submit"

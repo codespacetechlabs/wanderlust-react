@@ -1,3 +1,53 @@
 .smooth-transition {
   transition: height 2s ease-in-out;
 }
+
+.messages>h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.messages ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+.messages>* {
+  margin-bottom: 10px;
+}
+
+.messages>*:last-child {
+  margin-bottom: 0;
+}
+
+.messages>*:first-child {
+  margin-top: 0;
+}
+
+div#loader::before {
+  content: "";
+  position: absolute;
+  height: 4px;
+  background-color: rgba(2, 132, 199, 1);
+  width: 20px;
+  left: 0;
+  border-radius: 2px;
+  animation: loader 2s linear infinite;
+}
+
+@keyframes loader {
+  0% {
+    left: 0;
+    width: 0;
+  }
+
+  50% {
+    left: 10%;
+    width: 50%;
+  }
+
+  100% {
+    left: 100%;
+    width: 0;
+  }
+}

@@ -5,24 +5,24 @@ import { tools } from "../constants";
 export function createAppState() {
     const thread = signal();
     const createNewThread = async () => {
-        loading.value = true;
         let newThread = await createThread();
         thread.value = newThread;
-        loading.value = false;
     }
     const initThread = async (userQuery) => {
-        console.log(thread);
-        let newMessage = await openai.beta.threads.messages.create(thread.value.id, {
+        loading.value = true;
+        await openai.beta.threads.messages.create(thread.value.id, {
             content: userQuery,
             role: "user",
         });
-        console.log(newMessage);
         let res = await openai.beta.threads.runs.create(thread.value.id, {
             tools: tools,
             model: "gpt-4-1106-preview",
             assistant_id: import.meta.env.VITE_REACT_APP_OPENAI_ASSISTANT_ID,
         });
-        console.log(res.id);
+        if (runId.value != res.id) {
+            runId.value = res.id;
+            mapMarkers.value = [];
+        }
         return res;
     }
 
@@ -35,10 +35,10 @@ export function createAppState() {
 
 export const loading = signal(false);
 
-export const latitude = signal(23.0498928);
-
-export const longitude = signal(72.5330175);
-
+export const latitude = signal(37.7749);
+export const longitude = signal(-122.4194);
 export const zoom = signal(13);
 
 export const mapMarkers = signal([]);
+
+export const runId = signal(null);

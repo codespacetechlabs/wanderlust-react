@@ -1,20 +1,20 @@
 import OpenAI from "openai";
 import { tools } from "../constants";
-import { latitude, longitude, zoom } from "../signals";
+import { latitude, longitude, mapMarkers, zoom } from "../signals";
 
-export const update_map = (lg, lt, z) => {
-    console.log("update_map");
-    console.log(lg, lt, z);
+export const update_map = ({ longitude: lg, latitude: lt, zoom: z }) => {
     longitude.value = lg;
     latitude.value = lt;
     zoom.value = z;
-    console.log("[][][][]", longitude.value, latitude.value, zoom.value);
     return "Map updated";
 };
 
-export const add_marker = (longitude, latitude, label) => {
-    console.log("add_marker");
-    console.log(longitude, latitude, label);
+export const add_marker = ({ longitude, latitude, label }) => {
+    mapMarkers.value = [...mapMarkers.value, {
+        longitude: longitude,
+        latitude: latitude,
+        label: label,
+    }];
     return "Marker added";
 };
 
@@ -40,24 +40,24 @@ export const createThread = () => {
 };
 
 export const initThread = async (thread, userQuery) => {
-    console.log(thread);
-    let newMessage = await openai.beta.threads.messages.create(thread.id, {
+    await openai.beta.threads.messages.create(thread.id, {
         content: userQuery,
         role: "user",
     });
-    console.log(newMessage);
-    let res = await openai.beta.threads.runs.create(thread.id, {
+    await openai.beta.threads.runs.create(thread.id, {
         tools: tools,
         model: "gpt-4-1106-preview",
         assistant_id: import.meta.env.VITE_REACT_APP_OPENAI_ASSISTANT_ID,
     });
-    console.log(res.id);
 }
 
 export function assistantToolCall(toolCall) {
-    // actually executes the tool call the OpenAI assistant wants to perform
     const functionName = toolCall.function.name;
+
+    if (!toolCall.function.arguments) return;
+
     const args = JSON.parse(toolCall.function.arguments);
+
     const returnValue = functions[functionName](args);
 
     const toolOutputs = {
@@ -99,10 +99,10 @@ export const generateResponse = async (thread, res) => {
             );
         }
         if (response.status === "completed") {
-            completed = true;
             newMessage = await (
                 await openai.beta.threads.messages.list(thread.id)
             ).data;
+            completed = true;
             console.log(newMessage);
             return newMessage;
         }
