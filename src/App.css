@@ -2,6 +2,22 @@
   transition: height 2s ease-in-out;
 }
 
+.messages.assistant {
+  border-radius: 10px;
+  margin: 10px 0;
+  margin-bottom: 20px;
+}
+
+.messages.map,.messages.marker {
+  font-size: 12px;
+  margin: 10px 0;
+  color: #999;
+}
+
+.messages.user {
+  font-weight: 700;
+}
+
 .messages>h3 {
   font-size: 20px;
   font-weight: 700;

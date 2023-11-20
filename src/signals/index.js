@@ -42,3 +42,5 @@ export const zoom = signal(13);
 export const mapMarkers = signal([]);
 
 export const runId = signal(null);
+
+export const chatHistory = signal([]);

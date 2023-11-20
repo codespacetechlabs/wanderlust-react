@@ -14,7 +14,7 @@ const Form = ({ submitData }) => {
     validate: (values) => {
       const errors = {};
       if (!values.inputQuery) {
-        errors.inputQuery = "Required";
+        errors.inputQuery = "Message cannot be empty";
       }
       return errors;
     },

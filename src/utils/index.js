@@ -1,11 +1,15 @@
 import OpenAI from "openai";
 import { tools } from "../constants";
-import { latitude, longitude, mapMarkers, zoom } from "../signals";
+import { chatHistory, latitude, longitude, mapMarkers, zoom } from "../signals";
 
 export const update_map = ({ longitude: lg, latitude: lt, zoom: z }) => {
     longitude.value = lg;
     latitude.value = lt;
     zoom.value = z;
+    chatHistory.value = [...chatHistory.value, {
+        content: [{ text: { value: "Map Updated" } }],
+        role: "map",
+    }];
     return "Map updated";
 };
 
@@ -14,6 +18,10 @@ export const add_marker = ({ longitude, latitude, label }) => {
         longitude: longitude,
         latitude: latitude,
         label: label,
+    }];
+    chatHistory.value = [...chatHistory.value, {
+        content: [{ text: { value: "Marker Added" } }],
+        role: "marker",
     }];
     return "Marker added";
 };
@@ -76,7 +84,6 @@ export const generateResponse = async (thread, res) => {
         if (response.status === "in_progress") {
             continue;
         }
-        console.log(response);
         if (response.status === "requires_action") {
             const tool_outputs = [];
             for (
@@ -89,7 +96,6 @@ export const generateResponse = async (thread, res) => {
                 const toolOutput = assistantToolCall(tool);
                 tool_outputs.push(toolOutput);
             }
-            console.log(tool_outputs);
             newMessage = await openai.beta.threads.runs.submitToolOutputs(
                 thread.id,
                 res.id,
@@ -103,7 +109,6 @@ export const generateResponse = async (thread, res) => {
                 await openai.beta.threads.messages.list(thread.id)
             ).data;
             completed = true;
-            console.log(newMessage);
             return newMessage;
         }
     }

@@ -1,14 +1,19 @@
-import { useEffect } from "react";
 import Form from "./Form";
 import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
 import { loading } from "../signals";
+import { useEffect } from "react";
+import { RiMap2Fill } from "react-icons/ri";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { LuCompass } from "react-icons/lu";
 
 const Chat = ({ submitData, messages }) => {
+  // TODO: Scroll to bottom of chat on new message
   useEffect(() => {
-    const chatBox = document.querySelector(".messages:last-child");
-    if (chatBox) {
-      chatBox.scrollIntoView({ behavior: "smooth" });
+    const lastMessage = document.querySelector(".messages:last-child");
+    const messagesContainer = document.querySelector(".messages-container");
+    if (lastMessage) {
+      messagesContainer.scrollTop = lastMessage.offsetTop - 100;
     }
   }, [messages]);
   return (
@@ -18,13 +23,16 @@ const Chat = ({ submitData, messages }) => {
       <div
         className={`${
           messages.length > 0 &&
-          "flex-1 max-h-1/2 lg:max-h-full overflow-y-auto"
+          "flex-1 max-h-1/2 h-auto overflow-y-auto messages-container"
         }`}
       >
-        {messages.reverse().map((message, index) => (
-          <ReactMarkdown className="messages" key={index}>
-            {message.content[0].text.value}
-          </ReactMarkdown>
+        {messages.map((message, index) => (
+          <div key={index} className="flex ">
+            {message.role !== "user" && renderLogo[message.role]}
+            <ReactMarkdown className={`messages ${message.role} text-sm`}>
+              {message.content[0].text.value}
+            </ReactMarkdown>
+          </div>
         ))}
       </div>
       <Form submitData={submitData} />
@@ -43,4 +51,12 @@ export default Chat;
 Chat.propTypes = {
   submitData: PropTypes.func.isRequired,
   messages: PropTypes.array,
+};
+
+const renderLogo = {
+  assistant: (
+    <LuCompass className="text-lg text-gray-600 min-w-fit w-max px-2 mt-3" />
+  ),
+  marker: <FaMapMarkerAlt className="text-lg text-gray-600 w-max mt-3 px-2" />,
+  map: <RiMap2Fill className="text-lg text-gray-600 w-max mt-3 px-2" />,
 };
