@@ -28,7 +28,13 @@ const Main = ({ initiatedThread }) => {
 
   return (
     <main className="h-screen w-screen flex flex-col justify-stretch items-center py-10">
-      <h1 className="text-5xl text-center">Wanderlust</h1>
+      <div>
+        <h1 className="text-5xl text-center">Wanderlust</h1>
+        <p className="text-sm text-center mt-2" style={{ maxWidth: "50vw" }}>
+          Embark on a journey of discovery with Wanderlust Chat
+        </p>
+      </div>
+
       <section className="h-full w-full flex flex-col-reverse items-center gap-5 p-10 lg:flex-row lg:px-10">
         <Chat submitData={submitData} messages={chatHistory.value} />
         <Map />
