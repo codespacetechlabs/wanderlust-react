@@ -3,6 +3,7 @@ import Chat from "./Chat";
 import Map from "./Map";
 import { generateResponse } from "../utils";
 import { chatHistory, loading } from "../signals";
+import { FaGithub } from "react-icons/fa";
 
 const Main = ({ initiatedThread }) => {
   const submitData = async (data) => {
@@ -32,6 +33,15 @@ const Main = ({ initiatedThread }) => {
         <h1 className="text-5xl text-center">Wanderlust</h1>
         <p className="text-sm text-center mt-2" style={{ maxWidth: "50vw" }}>
           Embark on a journey of discovery with Wanderlust Chat
+        </p>
+        <p className="flex items-center mt-2 justify-center">
+          <a
+            href="https://github.com/codespacetechlabs/wanderlust-react"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FaGithub className="text-2xl text-center" />
+          </a>
         </p>
       </div>
 
